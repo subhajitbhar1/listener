@@ -1,3 +1,0 @@
-# This project needs current wheels. Do not inherit a user-level
-# `resolution = "lowest-direct"` (that pulls PyObjC 2.2, which is Python 2).
-resolution = "highest"

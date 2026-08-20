@@ -10,9 +10,9 @@ from typing import TYPE_CHECKING
 
 from listener.capture import Recorder
 from listener.cleanup import Cleaner
-from listener.injection import inject
+from listener.inject import inject
 from listener.macos import Overlay
-from listener.transcript import Transcriber
+from listener.transcribe import Transcriber
 
 if TYPE_CHECKING:
     import numpy as np

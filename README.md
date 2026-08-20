@@ -4,7 +4,44 @@ Fully offline voice dictation for macOS (Apple Silicon) — a free, local altern
 
 Press `ctrl+shift` in any app → speak → press again → clean text appears at your cursor. Speech-to-text runs on-device (faster-whisper), filler removal and punctuation cleanup run through a local LLM (llama.cpp). No cloud, no subscription, no audio leaving your Mac.
 
-- **Want to run it?** `brew install just && just setup && just run` — details in [reproduce.md](reproduce.md).
-- **Want to build it yourself with AI?** [steps.md](steps.md) has the exact Claude Code prompts that created this app.
+```bash
+brew install just          # one-time; skip if you already have it
+just setup                 # Python env, llama.cpp, cleanup model
+just run
+```
 
-Built with Claude Code (planned with Opus 4.8, built with Fable 5).
+`just setup` skips anything already present. Listener starts one `llama-server` child while it runs and stops it on quit. If you previously used Ollama: `brew services stop ollama`.
+
+## Permissions (one time)
+
+In **System Settings → Privacy & Security**, add the Python binary printed at the end of `just setup` to:
+
+- **Input Monitoring** — global hotkey
+- **Accessibility** — paste into other apps
+- **Microphone** — macOS asks on first recording; click Allow
+
+The settings file picker hides dot-folders. Press `⌘⇧G` and paste the path, or run `open -R .venv/bin/python` and drag the file in. Restart after granting (`just run` again).
+
+## Use it
+
+Click into any text field, then:
+
+1. Press `ctrl+shift` → a small waveform pill appears (recording)
+2. Speak naturally — ums and uhs are fine, they get removed
+3. Press `ctrl+shift` again → cleaned text is pasted at the cursor
+
+```bash
+just                  # list recipes
+just run              # start in the foreground
+just install-login    # start at every login (LaunchAgent)
+just uninstall-login  # remove the login agent
+```
+
+Logs after `just install-login`: `tail -f ~/Library/Logs/listener.log`
+
+## Customize (`config.yaml`, then restart)
+
+- **Hotkey**: `hotkey.key` (e.g. `alt_r`, `ctrl+alt`) — `fn` is not possible on macOS
+- **Hold vs toggle**: `hotkey.mode: hold | toggle`
+- **LLM**: `llm.model` — Hugging Face GGUF (`repo:quant`) or a local `.gguf` path
+- **Accuracy vs speed**: `stt.model: tiny.en | base | small | medium | large-v3`

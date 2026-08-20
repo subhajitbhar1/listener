@@ -1,6 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "listener"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "faster-whisper>=1.1.0",
+    "sounddevice>=0.5.0",
+    "pynput>=1.7.7",
+    "pyobjc-framework-Quartz>=10.3",
+    "pyobjc-framework-Cocoa>=10.3",
+    "pyobjc-framework-ApplicationServices>=10.3",
+    "pyyaml>=6.0.1",
+    "pydantic>=2.6.0",
+    "requests>=2.32.0",
+    "numpy>=1.26.0",
+]
+
+[tool.uv]
+resolution = "highest"
+
+[tool.ruff]
 target-version = "py312"
 
-lint.extend-select = [
+[tool.ruff.lint]
+extend-select = [
     "E",
     "W",
     "C90",
@@ -56,8 +82,7 @@ lint.extend-select = [
     "FURB",
     "RUF",
 ]
-
-lint.ignore = [
+ignore = [
     "E501",
     "D1",
     "FBT003",
@@ -73,8 +98,6 @@ lint.ignore = [
     "COM812",
 ]
 
-[lint.per-file-ignores]
-"prove.py" = ["S101", "PT018"]
-"listener/macos/overlay.py" = ["N802", "PLW0642"]
-"listener/macos/shell.py" = ["BLE001"]
-"listener/cleanup/cleaner.py" = ["S603", "SIM115"]
+[tool.ruff.lint.per-file-ignores]
+"listener/macos.py" = ["N802", "PLW0642", "BLE001"]
+"listener/cleanup.py" = ["S603", "SIM115"]

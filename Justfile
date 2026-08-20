@@ -96,7 +96,7 @@ _ensure-llamacpp:
     fi
 
 _sync:
-    cd "{{root}}" && UV_RESOLUTION=highest uv venv --python "$UV_PYTHON" --allow-existing && UV_RESOLUTION=highest uv pip install -r requirements.txt
+    cd "{{root}}" && UV_RESOLUTION=highest uv venv --python "$UV_PYTHON" --allow-existing && UV_RESOLUTION=highest uv pip install .
 
 _pull-model:
     #!/usr/bin/env zsh
