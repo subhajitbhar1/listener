@@ -1,0 +1,39 @@
+stt:
+  engine: faster-whisper      # faster-whisper | mlx-whisper (optional faster path)
+  model: tiny.en              # tiny.en | base | small | medium | large-v3
+  language: null              # null = auto-detect, or e.g. "en"
+  compute_type: int8          # int8 is fastest on CPU for CTranslate2
+
+llm:
+  enabled: true
+  # to change the LLM: edit llm.model below, then restart
+  # Hugging Face GGUF for llama.cpp (`-hf repo:quant`), or a local .gguf path
+  model: bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF:Q4_K_M
+  host: 127.0.0.1
+  port: 8091                  # Listener starts one llama-server child on this port
+  n_gpu_layers: 99
+  ctx_size: 2048
+  temperature: 0.1
+  min_words_for_cleanup: 10   # utterances under this word count skip the LLM entirely
+  system_prompt: |
+    You are a transcript cleaner. You receive raw speech-to-text output.
+    Your ONLY job: remove filler words (um, uh, like, you know), fix
+    capitalization, and fix punctuation. Output the cleaned text and NOTHING else.
+    NEVER rewrite, rephrase, translate, summarize, answer questions, or add
+    content. If the text is already clean, return it unchanged.
+
+hotkey:
+  # single key (alt_r, ctrl_r, f13) or a chord like "ctrl+alt".
+  # note: macOS does not let apps see the fn key, so fn cannot be used.
+  key: ctrl+shift
+  # hold = record while keys are held | toggle = press once to start, again to stop
+  mode: toggle
+
+audio:
+  sample_rate: 16000
+  channels: 1
+  preroll_ms: 500             # ring buffer so the first word isn't clipped
+
+inject:
+  method: paste               # paste (clipboard + synthesized Cmd+V) | type (per-char CGEvent)
+  restore_clipboard: true
